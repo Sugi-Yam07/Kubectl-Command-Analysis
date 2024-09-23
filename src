@@ -1,1 +1,152 @@
+import pandas as pd
+import matplotlib.pyplot as plt
 
+# Data for the DataFrame (use descriptive variable names)
+data = {
+    "objective": [
+        "Print supported API versions",
+        "Print inherited flags by all commands",
+        "Build current directory manifest",
+        "Print control plane and cluster services addresses",
+        "Print supported API resources",
+        "Print client and server versions",
+        "Dump current cluster state",
+        "Mark node 'testing-node-11' unschedulable",
+    ],
+    "command_name": [
+        "api-versions",
+        "options",
+        "kustomize",
+        "cluster-info",
+        "api-resources",
+        "version",
+        "cluster-info dump",
+        "cordon",
+    ],
+    "command": [
+        "kubectl api-versions",
+        "kubectl options",
+        "kubectl kustomize",
+        "kubectl cluster-info",
+        "kubectl api-resources",
+        "kubectl version",
+        "kubectl cluster-info dump",
+        "kubectl cordon NODE",
+    ],
+    "description": [
+        "Print supported API versions (group/version format).",
+        "Print the list of flags inherited by all commands.",
+        "Build a set of KRM resources using a 'kustomization.yaml' file. The 'DIR' argument is the path to a directory containing 'kustomization.yaml' or a git repository URL with a path specifying the file location.",
+        "Display addresses of control plane and services with label 'kubernetes.io/cluster-service=true'. Use 'kubectl cluster-info dump' for further debugging.",
+        "Print supported API resources on the server.",
+        "Print client and server version information for the current context.",
+        "Dump cluster information for debugging. Dumps everything to stdout by default. Optionally specify a directory with '--output-directory'. Dumps current and 'kube-system' namespaces by default, use '--namespaces' or '--all-namespaces' for others. Also dumps pod logs to separate directories based on namespace and pod name.",
+        "Mark node as unschedulable.",
+    ],
+    "syntax": [
+        "kubectl api-versions",
+        "kubectl options",
+        "kubectl kustomize DIR",
+        "kubectl cluster-info",
+        "kubectl api-resources",
+        "kubectl version",
+        "kubectl cluster-info dump",
+        "kubectl cordon NODE",
+    ],
+    "flags": [
+        [],
+        [],
+        [
+            {
+                "default": "false",
+                "description": "Run function in container using command executor's uid and gid.",
+                "option": "as-current-user",
+                "short": None,
+            },
+            # ... other flags
+        ],
+        [],
+        [],
+        [],
+        [],
+        [],
+    ],
+    "question": [
+        "View supported API versions",
+        "View options for all kubectl commands",
+        "Generate Kubernetes manifest from current directory",
+        "Display control plane and cluster services information",
+        "Print supported API resources list",
+        "Display client and server versions",
+        "Dump current cluster state",
+        "Mark node 'testing-node-11' unschedulable",
+    ],
+    "chain_of_thought": [
+        "Use 'api-versions' subcommand to view supported API versions.",
+        "Use 'options' subcommand to view options for all kubectl commands.",
+        "Use 'kustomize' subcommand to generate a Kubernetes manifest.",
+        "Use 'cluster-info' subcommand to display information about the cluster.",
+        "Use 'api-resources' subcommand to get the list of supported API resources.",
+        "Use 'version' subcommand to get information about the version.",
+        "Use 'cluster-info' subcommand to get information about the cluster.",
+        "Use 'cordon' subcommand to mark a node as unschedulable.",
+    ],
+}
+
+df = pd.DataFrame(data)
+
+# Analysis of the data
+# Count commands by objective
+command_count_by_objective = df.groupby("objective").size().reset_index(name="count")
+
+# Count commands by syntax
+command_count_by_syntax = df.groupby("syntax").size().reset_index(name="count")
+
+# Count commands by flags
+command_count_by_flags = df[df["flags"].apply(lambda x: len(x) > 0)].groupby("command_name").size().reset_index(name="count")
+
+# Gráficos
+
+# Gráfico de barras para contagem de comandos por objetivo
+plt.figure(figsize=(10, 6))
+plt.bar(command_count_by_objective["objective"], command_count_by_objective["count"], color='skyblue')
+plt.xlabel('Objetivo')
+plt.ylabel('Contagem de Comandos')
+plt.title('Contagem de Comandos por Objetivo')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()
+
+# Gráfico de barras para contagem de comandos por sintaxe
+plt.figure(figsize=(10, 6))
+plt.bar(command_count_by_syntax["syntax"], command_count_by_syntax["count"], color='lightgreen')
+plt.xlabel('Sintaxe')
+plt.ylabel('Contagem de Comandos')
+plt.title('Contagem de Comandos por Sintaxe')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()
+
+# Relatório explicativo
+report = """
+Relatório de Análise de Comandos do Kubectl:
+
+1. Contagem de Comandos por Objetivo:
+{objective_count}
+
+2. Contagem de Comandos por Sintaxe:
+{sintax_count}
+
+3. Contagem de Comandos por Bandeiras:
+{flags_count}
+
+Este é apenas um exemplo de análise que pode ser feita com os dados fornecidos.
+
+Fim do Relatório.
+""".format(
+    objective_count=command_count_by_objective.to_string(index=False),
+    sintax_count=command_count_by_syntax.to_string(index=False),
+    flags_count=command_count_by_flags.to_string(index=False)
+)
+
+print(report)
