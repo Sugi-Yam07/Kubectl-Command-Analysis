@@ -1,1 +1,64 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.env
+*.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Mac OS
+.DS_Store
+
+# Log files
+*.log
+
+# Virtual environment
+/.venv
+/.env
+
+# Data files
+*.csv
+*.xlsx
+*.json
+*.zip
+
+# Config files
+*.ini
+*.toml
+*.yaml
+*.yml
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Test reports
+coverage/
+*.cover
+*.py,cover
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore database files
+*.sqlite3
+
+# Ignore environment files
+.env
+
+# Ignore logs and local files
+*.log
+
+# Ignore compiled Python files
+*.pyo
+*.pyd
